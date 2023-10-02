@@ -1,3 +1,4 @@
 # Getting Start
-    ``` npm i && node . ```
+    git clone
+    npm i && node . 
     Webserver Starts on port 3000
