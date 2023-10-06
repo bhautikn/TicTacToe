@@ -1,27 +1,27 @@
-const http = require('https');
-const httpWsServer = http.createServer();
+const https = require('https');
+const httpWsServer = require('http').createServer();
 const fs = require('fs');
-const io = require('socket.io')(httpWsServer, { cors: { origin: "*" } });
+const io = require('socket.io')(httpWsServer, { cors: { origin: '*' }});
+
+const express = require('express');
+const app = express();
 
 
-const app = http.createServer((req, res)=>{
-    if(req.url === '/'){
-        let indexFile = fs.readFileSync('./public/index.html');
-        res.writeHead(200,  {'Content-Type': 'text/html'});
-        res.end(indexFile.toString());
-    }
-    else if(req.url === '/style.css'){
-        let indexFile = fs.readFileSync('./public/style.css');
-        res.writeHead(200,  {'Content-Type': 'text/css'});
-        res.end(indexFile.toString());
-    }
-    else if(req.url === '/script.js'){
-        let indexFile = fs.readFileSync('./public/script.js');
-        res.writeHead(200,  {'Content-Type': 'text/javascript'});
-        res.end(indexFile.toString());
-    }
+app.get('/', (req, res)=>{
+    let indexFile = fs.readFileSync('./public/index.html');
+    res.writeHead(200,  {'Content-Type': 'text/html'});
+    res.end(indexFile.toString());
 })
-
+app.get('/style.css', (req, res)=>{
+    let indexFile = fs.readFileSync('./public/style.css');
+    res.writeHead(200,  {'Content-Type': 'text/css'});
+    res.end(indexFile.toString());
+})
+app.get('/script.js', (req, res)=>{
+    let indexFile = fs.readFileSync('./public/script.js');
+    res.writeHead(200,  {'Content-Type': 'text/javascript'});
+    res.end(indexFile.toString());
+})
 
 let counter = 0;
 let clients = {};
@@ -141,8 +141,13 @@ function emitOwnTern(obj, arr, a, b) {
         console.log(e);
     }
 }
+const options = { 
+    key: fs.readFileSync("server.key"), 
+    cert: fs.readFileSync("server.cert"), 
+};
+https.createServer(options, app)
+.listen(3000, function (req, res) { 
+  console.log("Server started at port 3000"); 
+});
 
 httpWsServer.listen(8080)
-app.listen(3000, ()=>{
-    console.log('server started on port', 3000)
-});
