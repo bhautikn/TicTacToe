@@ -1,26 +1,26 @@
 const http = require('http');
 const httpWsServer = http.createServer();
-// const fs = require('fs');
+const fs = require('fs');
 const io = require('socket.io')(httpWsServer, { cors: { origin: "*" } });
 
 
-// const app = http.createServer((req, res)=>{
-//     if(req.url === '/'){
-//         let indexFile = fs.readFileSync('./public/index.html');
-//         res.writeHead(200,  {'Content-Type': 'text/html'});
-//         res.end(indexFile.toString());
-//     }
-//     else if(req.url === '/style.css'){
-//         let indexFile = fs.readFileSync('./public/style.css');
-//         res.writeHead(200,  {'Content-Type': 'text/css'});
-//         res.end(indexFile.toString());
-//     }
-//     else if(req.url === '/script.js'){
-//         let indexFile = fs.readFileSync('./public/script.js');
-//         res.writeHead(200,  {'Content-Type': 'text/javascript'});
-//         res.end(indexFile.toString());
-//     }
-// })
+const app = http.createServer((req, res)=>{
+    if(req.url === '/'){
+        let indexFile = fs.readFileSync('./public/index.html');
+        res.writeHead(200,  {'Content-Type': 'text/html'});
+        res.end(indexFile.toString());
+    }
+    else if(req.url === '/style.css'){
+        let indexFile = fs.readFileSync('./public/style.css');
+        res.writeHead(200,  {'Content-Type': 'text/css'});
+        res.end(indexFile.toString());
+    }
+    else if(req.url === '/script.js'){
+        let indexFile = fs.readFileSync('./public/script.js');
+        res.writeHead(200,  {'Content-Type': 'text/javascript'});
+        res.end(indexFile.toString());
+    }
+})
 
 
 let counter = 0;
@@ -30,6 +30,7 @@ let isAnyWinner = false;
 let arr = [];
 for (let i = 0; i < 9; i++)
     arr.push('');
+let totalClient = 0;
 
 function isAnyWin(){
     for (let i=0;i<3;i++) {
@@ -60,6 +61,8 @@ function isAnyWin(){
 }
 
 io.on('connection', socket => {
+    console.log(`Client Connected ${socket.id}`);
+    console.log('total Client', ++totalClient);
     if (clientsArray.length < 2) {
         let obj = {};
         if (clientsArray.length === 0) {
@@ -81,6 +84,8 @@ io.on('connection', socket => {
         console.log(clients);
     }
     socket.on('disconnect', ()=>{
+        console.log('Client Disconnected', socket.id);
+        console.log('total Client', --totalClient);
         io.emit('notice', 'other player is disconnected');
         if(clientsArray[0] == socket.id){
             clientsArray.splice(0,1);
@@ -143,6 +148,6 @@ function emitOwnTern(obj, arr, a, b) {
 }
 
 httpWsServer.listen(8080)
-// app.listen(3000, ()=>{
-//     console.log('server started on port', 3000)
-// });
+app.listen(3000, ()=>{
+    console.log('server started on port', 3000)
+});
