@@ -1,4 +1,4 @@
-const http = require('http');
+const http = require('https');
 const httpWsServer = http.createServer();
 const fs = require('fs');
 const io = require('socket.io')(httpWsServer, { cors: { origin: "*" } });
