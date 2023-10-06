@@ -1,10 +1,10 @@
-const https = require('https');
-const httpWsServer = https.createServer();
+const http = require('https');
+const httpWsServer = http.createServer();
 const fs = require('fs');
 const io = require('socket.io')(httpWsServer, { cors: { origin: "*" } });
 
 
-const app = https.createServer((req, res)=>{
+const app = http.createServer((req, res)=>{
     if(req.url === '/'){
         let indexFile = fs.readFileSync('./public/index.html');
         res.writeHead(200,  {'Content-Type': 'text/html'});
@@ -30,7 +30,6 @@ let isAnyWinner = false;
 let arr = [];
 for (let i = 0; i < 9; i++)
     arr.push('');
-let totalClient = 0;
 
 function isAnyWin(){
     for (let i=0;i<3;i++) {
@@ -61,8 +60,6 @@ function isAnyWin(){
 }
 
 io.on('connection', socket => {
-    console.log(`Client Connected ${socket.id}`);
-    console.log('total Client', ++totalClient);
     if (clientsArray.length < 2) {
         let obj = {};
         if (clientsArray.length === 0) {
@@ -84,8 +81,6 @@ io.on('connection', socket => {
         console.log(clients);
     }
     socket.on('disconnect', ()=>{
-        console.log('Client Disconnected', socket.id);
-        console.log('total Client', --totalClient);
         io.emit('notice', 'other player is disconnected');
         if(clientsArray[0] == socket.id){
             clientsArray.splice(0,1);
