@@ -1,10 +1,10 @@
-const http = require('http');
-const httpWsServer = http.createServer();
+const https = require('https');
+const httpWsServer = https.createServer();
 const fs = require('fs');
 const io = require('socket.io')(httpWsServer, { cors: { origin: "*" } });
 
 
-const app = http.createServer((req, res)=>{
+const app = https.createServer((req, res)=>{
     if(req.url === '/'){
         let indexFile = fs.readFileSync('./public/index.html');
         res.writeHead(200,  {'Content-Type': 'text/html'});
