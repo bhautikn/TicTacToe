@@ -1,4 +1,4 @@
-const socket = io('ws://' + window.location.hostname + ':8080');
+const socket = io('ws://' + window.location.hostname);
 let isMyturn = false;
 let gameDiv = document.getElementsByClassName('game-div');
 let counter = 0;
