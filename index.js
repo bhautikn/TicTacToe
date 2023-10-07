@@ -1,11 +1,8 @@
-const https = require('https');
-const httpWsServer = require('http').createServer();
 const fs = require('fs');
-const io = require('socket.io')(httpWsServer, { cors: { origin: '*' }});
-
-const express = require('express');
-const app = express();
-
+var express = require('express')
+var app = express()
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
 app.get('/', (req, res)=>{
     let indexFile = fs.readFileSync('./public/index.html');
@@ -145,9 +142,6 @@ const options = {
     key: fs.readFileSync("server.key"), 
     cert: fs.readFileSync("server.cert"), 
 };
-https.createServer(options, app)
-.listen(3000, function (req, res) { 
+server.listen(80, ()=>{ 
   console.log("Server started at port 3000"); 
 });
-
-httpWsServer.listen(8080)
