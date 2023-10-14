@@ -6,7 +6,6 @@ let WhatMySymbol = '';
 
 socket.on('whoistern', whoseTern => {
     isMyturn = whoseTern;
-    console.log(isMyturn);
     if (isMyturn)
         document.getElementById('whoistern').innerHTML = "Your Turn";
     else
