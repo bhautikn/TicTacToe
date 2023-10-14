@@ -25,6 +25,7 @@ let clients = {};
 let clientsArray = [];
 let isAnyWinner = false;
 let arr = [];
+let clientCounter = 0;
 for (let i = 0; i < 9; i++)
     arr.push('');
 
@@ -57,6 +58,7 @@ function isAnyWin(){
 }
 
 io.on('connection', socket => {
+    io.emit('new_connect', ++clientCounter);
     if (clientsArray.length < 2) {
         let obj = {};
         if (clientsArray.length === 0) {
@@ -78,6 +80,7 @@ io.on('connection', socket => {
         console.log(clients);
     }
     socket.on('disconnect', ()=>{
+        io.emit('new_connect', --clientCounter);
         io.emit('notice', 'other player is disconnected');
         if(clientsArray[0] == socket.id){
             clientsArray.splice(0,1);

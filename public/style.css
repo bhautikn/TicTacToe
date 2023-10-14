@@ -26,7 +26,12 @@ button {
     transition-duration: 500ms;
     user-select: none;
 }
-
+.info{
+    background-color: blue;
+    padding: 5px 10px;
+    color: aliceblue;
+    margin: 0 5px;
+}
 .game-div:hover {
     transition-duration: 500ms;
     background-color: lightgreen;

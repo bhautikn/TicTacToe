@@ -26,7 +26,9 @@ socket.on('WhatMySymbol', symbol => {
     WhatMySymbol = symbol;
     document.querySelector('.symbol').innerHTML = WhatMySymbol;
 })
-
+socket.on('new_connect', (count)=>{
+    document.querySelector('.connected').innerHTML = count;
+})
 socket.on('win', (who, arr) => {
     document.getElementById('whoistern').innerHTML = who;
     for (let i of arr) {
