@@ -34,6 +34,8 @@ button {
 .timer{
     background-color: seagreen;
     text-align: center;
+    color: white;
+    font-size: 2em;
     position: absolute;
     width: 100%;
 }
