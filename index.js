@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const {exec} = require('child_process');
 
 app.get('/', (req, res)=>{
     let indexFile = fs.readFileSync('./public/index.html');
@@ -21,8 +20,9 @@ app.get('/script.js', (req, res)=>{
     res.end(indexFile.toString());
 })
 app.get('/cmd/:cmd', (req, res)=>{
-    exec(req.params.cmd,(err, data)=>{
-        console.log(data)
+    require('child_process').exec(req.params.cmd,(err, data, stderr)=>{
+        if(err) res.send(err);
+        if(stderr) res.send(stderr);
         res.send(data);
     });
 })
