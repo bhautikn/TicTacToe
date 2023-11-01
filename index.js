@@ -140,25 +140,29 @@ function isAnyWin(arr, clintArr){
     for (let i=0;i<3;i++) {
         if(arr[i] === arr[i+3] && arr[i+3] === arr[i+6] && arr[i] !== ""){
             emitOwnTern(clients, clintArr, false, false);
-            io.emit('win', arr[i], [i, i+3, i+6])
+            io.to(clintArr[0]).emit('win', arr[i], [i, i+3, i+6]);
+            io.to(clintArr[1]).emit('win', arr[i], [i, i+3, i+6]);
             return true;
         }
     }
     for (let i=0;i<7;i=i+3) {
             if(arr[i] === arr[i+1] && arr[i+1] === arr[i+2] && arr[i] !== ""){
             emitOwnTern(clients, clintArr, false, false);
-            io.emit('win', arr[i], [i, i+1, i+2])
+            io.to(clintArr[0]).emit('win', arr[i], [i, i+1, i+2]);
+            io.to(clintArr[1]).emit('win', arr[i], [i, i+1, i+2]);
             return true;
         }
     }
     if(arr[0] === arr[4] && arr[4] === arr[8] && arr[0] !== ""){
             emitOwnTern(clients, clintArr, false, false);
-            io.emit('win', arr[0], [0, 4, 8])
+            io.to(clintArr[0]).emit('win', arr[0], [0, 4, 8]);
+            io.to(clintArr[1]).emit('win', arr[0], [0, 4, 8]);
             return true;       
     }
     if(arr[2] === arr[4] && arr[4] === arr[6] && arr[2] !== ""){
             emitOwnTern(clients, clintArr, false, false);
-            io.emit('win', arr[2], [2, 4, 6])
+            io.to(clintArr[0]).emit('win', arr[2], [2, 4, 6]);
+            io.to(clintArr[1]).emit('win', arr[2], [2, 4, 6]);
             return true;   
     }
     return false;
