@@ -1,3 +1,11 @@
+:root{
+    --border-color: rgb(209, 209, 209);
+    --border-color-bold: rgb(136, 136, 136);
+    --shadow-color: rgb(195, 194, 194);
+    --text-color: rgb(51, 51, 51);
+    --bg-color: rgb(255, 255, 255);
+    --bg-color-dark: rgb(200, 200, 200);
+}
 * {
     box-sizing: border-box;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -12,12 +20,11 @@ button {
     margin: 0 auto;
     background-color: green;
 }
-
 .game-div {
     width: 150px;
     height: 150px;
     float: left;
-    border: 0.1px solid grey;
+    border: 0.1px solid var(--border-color-bold);
     font-size: 5em;
     cursor: pointer;
     align-items: center;
@@ -30,27 +37,57 @@ button {
     background-color: blue;
     padding: 5px 10px;
     color: aliceblue;
-    margin: 0 5px;
+    margin: 5px;
+    width: max-content;
+    float: left;
 }
 .game-div:hover {
     transition-duration: 500ms;
     background-color: lightgreen;
 }
 .timer{
-    background-color: seagreen;
     text-align: center;
-    color: white;
-    font-size: 2em;
+    color: var(--text-color);
+    font-size: 1.5em;
+}
+input{
+    padding: 5px;
+    border: 1px solid var(--border-color-bold);
+    border-radius: 4px;
+    color: var(--text-color);
+}
+.btn{
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+.center-box{
+    display: none;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    box-shadow: 10px 2px 15px var(--shadow-color);
+    padding: 20px;
+    justify-content: center;
+    gap: 20px;
+    width: 70%;
+    background-color: var(--bg-color);
     position: absolute;
-    width: 100%;
+    left: 15%;
+    top: 30%;
 }
 @media screen and (max-width: 600px) {
     .container {
         width: 300px;
     }
-
     .game-div {
         height: 100px;
         width: 100px;
+    }
+    .center-box{
+        width: 100%;
+        left: 0;
+    }
+    .info{
+        margin: 5px;
     }
 }

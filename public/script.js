@@ -1,8 +1,28 @@
-const socket = io('https://' + window.location.hostname);
+const socket = io('http://' + window.location.hostname);
 let isMyturn = false;
 let gameDiv = document.getElementsByClassName('game-div');
 let counter = 0;
 let WhatMySymbol = '';
+let userId = '';
+let opponent = '';
+
+if(localStorage.name === undefined){
+    console.log(localStorage.name)
+    const input_name_box = document.querySelector('#name-input');
+    input_name_box.style.display = 'flex';
+    document.querySelector('#name-submit-btn').onclick= (e)=>{
+        e.preventDefault();
+        input_name_box.style.display = 'none';
+        let temp_name = document.querySelector('#name-value').value;
+        localStorage.setItem('name', temp_name);
+    }
+}
+
+socket.on('myId', (id)=>{ userId = id; })
+socket.on('reload',()=>{ location.reload(); });
+setTimeout(()=>{
+    socket.emit('name', localStorage.name, userId);
+}, 2000)
 
 socket.on('whoistern', whoseTern => {
     isMyturn = whoseTern;
@@ -11,17 +31,20 @@ socket.on('whoistern', whoseTern => {
     else
         document.getElementById('whoistern').innerHTML = "Other player Turn";
 })
-socket.on('chngeOnDiv', (symbol, divId) => {
+socket.on('chngeOnDiv', (symbol, divId) => { 
     gameDiv[divId].innerHTML = symbol;
 })
-
 socket.on('clearDiv', () => {
     for (const iterator of gameDiv) {
         iterator.innerHTML = '';
         iterator.style.color = 'black';
     }
 })
-
+socket.on('myopponent', (name)=>{
+    console.log(name)
+    opponent = name;
+    document.querySelector('.myopponent').innerHTML = name;
+})
 socket.on('WhatMySymbol', symbol => {
     WhatMySymbol = symbol;
     document.querySelector('.symbol').innerHTML = WhatMySymbol;
@@ -30,7 +53,17 @@ socket.on('new_connect', (count)=>{
     document.querySelector('.connected').innerHTML = count;
 })
 socket.on('win', (who, arr) => {
-    document.getElementById('whoistern').innerHTML = who;
+    console.log(who);
+    if(who == WhatMySymbol){
+        document.getElementById('whoistern').innerHTML = 'You are Winner';
+    }
+    else if(who == 'tie'){
+        document.getElementById('whoistern').innerHTML = 'tie';
+    }
+    else{
+        document.getElementById('whoistern').innerHTML = opponent +' is Winner';
+    }
+    document.querySelector('.timer').style.display = 'flex';
     for (let i of arr) {
         gameDiv[i].style.color = 'red';
     }
@@ -40,11 +73,11 @@ socket.on('win', (who, arr) => {
             it.style.color = "black";
         }
         clearInterval(id1);
-        document.querySelector('h3').innerHTML = "";
+        document.querySelector('.timer').style.display = 'none';
     }, 6000)
     let second = 4;
     let id1 = setInterval(() => {
-        document.querySelector('h3').innerHTML = 'Game restart in ' + second--;
+        document.querySelector('.timer').innerHTML = 'Game restart in ' + second--;
     }, 1000)
 
 })
@@ -55,7 +88,7 @@ for (let iterator = 0; iterator < gameDiv.length; iterator++) {
     gameDiv[iterator].addEventListener('click', (e) => {
         if (isMyturn && e.target.innerHTML === "") {
             e.target.innerHTML = WhatMySymbol;
-            socket.emit('changeOnDiv', iterator);
+            socket.emit('changeOnDiv', iterator, userId);
         }
     })
 }
