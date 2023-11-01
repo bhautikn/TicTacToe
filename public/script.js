@@ -1,4 +1,4 @@
-const socket = io('http://' + window.location.hostname);
+const socket = io('https://'+window.location.hostname);
 let isMyturn = false;
 let gameDiv = document.getElementsByClassName('game-div');
 let counter = 0;
@@ -7,7 +7,6 @@ let userId = '';
 let opponent = '';
 
 if(localStorage.name === undefined){
-    console.log(localStorage.name)
     const input_name_box = document.querySelector('#name-input');
     input_name_box.style.display = 'flex';
     document.querySelector('#name-submit-btn').onclick= (e)=>{
@@ -15,14 +14,16 @@ if(localStorage.name === undefined){
         input_name_box.style.display = 'none';
         let temp_name = document.querySelector('#name-value').value;
         localStorage.setItem('name', temp_name);
+        socket.emit('name', localStorage.name, userId);
     }
 }
-
+else{
+    setTimeout(()=>{
+        socket.emit('name', localStorage.name, userId);
+    }, 2000)
+}
 socket.on('myId', (id)=>{ userId = id; })
 socket.on('reload',()=>{ location.reload(); });
-setTimeout(()=>{
-    socket.emit('name', localStorage.name, userId);
-}, 2000)
 
 socket.on('whoistern', whoseTern => {
     isMyturn = whoseTern;

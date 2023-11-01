@@ -31,7 +31,8 @@ io.on('connection', (socket)=>{
     addClient(clientsArray, CharArr, clients, socket.id);
     io.emit('new_connect', ++clientCounter);
     socket.on('name', (name, id)=>{
-        let number = atob(id);
+        if (name == null) name = '';
+        let number = Buffer.from(id, 'base64').toString();
         clients[socket.id].name = name.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
         try{
             if(clientsArray[number].length == 2){
@@ -114,7 +115,7 @@ function addClient(arr, CharacterArr, clientObj, id){
         io.to(id).emit('whoistern', false);
         io.to(id).emit('WhatMySymbol', 'x');
         io.to(id).emit('notice', 'waiting for other player....');
-        io.to(id).emit('myId', btoa(number+1));
+        io.to(id).emit('myId', Buffer.from((number+1)+'').toString('base64'));
         counter.push(0);
         CharacterArr.push([]);
         isAnyWinner.push(false);
@@ -129,10 +130,10 @@ function addClient(arr, CharacterArr, clientObj, id){
         io.to(arr[number][0]).emit('whoistern', true);
         io.to(id).emit('WhatMySymbol', 'o');
         io.to(arr[number][0]).emit('notice', 'Your Turn');
-        io.to(id).emit('myId', btoa(number));
+        io.to(id).emit('myId', Buffer.from(number+"").toString('base64'));
     }
     clients = { ...clients, ...obj };
-    // console.log(clients)
+    console.log(clients)
 }
 function isAnyWin(arr, clintArr){
     for (let i=0;i<3;i++) {
@@ -172,6 +173,7 @@ function emitOwnTern(obj, arr, a, b) {
     }
 }
 //////////////////////////////////////////////////////////////////
+
 server.listen(80, ()=>{ 
   console.log("Server started at port", 80); 
 }); 
