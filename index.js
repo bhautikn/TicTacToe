@@ -44,7 +44,8 @@ io.on('connection', (socket)=>{
         }
     })
     socket.on('changeOnDiv', (iterator, userId) => {
-        let i = atob(userId);
+        let i = Buffer.from(userId, 'base64').toString('ascii');
+        // let i = atob(userId);
         if (CharArr[i][iterator] === "" && clients[socket.id].isYourTurn && counter[i] < 9 && !isAnyWinner[i]) {
             CharArr[i][iterator] = clients[socket.id].Symbol;
             io.to(clientsArray[i][0]).emit('chngeOnDiv', CharArr[i][iterator], iterator);
